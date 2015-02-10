@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GoogleImagesSearch</string>
+    <string name="action_settings">Settings</string>
+    <string name="searchbarhint">Enter search text here</string>
+    <string name="advanced">Advanced</string>
+    <string name="title_activity_advanced_settings">AdvancedSettingsActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>
