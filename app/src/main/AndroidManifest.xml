@@ -26,6 +26,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mekilah.codepath.googleimagessearch.activities.SearchResultsActivity" />
         </activity>
+        <activity
+            android:name=".activities.FullScreenSearchItemActivity"
+            android:label="@string/title_activity_full_screen_search_item"
+            android:parentActivityName=".activities.SearchResultsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mekilah.codepath.googleimagessearch.activities.SearchResultsActivity" />
+        </activity>
     </application>
 
 </manifest>

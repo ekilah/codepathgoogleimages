@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+
+    >
 
     <ImageView
         android:id="@+id/ivResultItem"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="130dp"
+        android:layout_height="150dp"
         android:adjustViewBounds="true"
-        android:scaleType="centerInside"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/ic_launcher"
+
+        />
+    <TextView
+        android:id="@+id/tvResultTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivResultItem"
+        android:layout_alignLeft="@id/ivResultItem"
+        android:layout_alignRight="@id/ivResultItem"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textSize="15sp"
+        tools:text="Title of this image is pretty great. Green bot ftw"
+        android:gravity="center"
 
         />
 

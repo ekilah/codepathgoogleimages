@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +34,10 @@ public class SearchResultsActivity extends ActionBarActivity{
 
     //intent request codes
     public static final int REQUEST_CODE_ADVANCED_SETTINGS = 100;
+    public static final int REQUEST_CODE_FULLSCREEN_RESULT_ITEM = 200;
+
+    //intent request extras keys
+    public static final String REQUEST_FULLSCREEN_RESULT_ITEM_DATA = "item_data";
 
     //intent result codes
     public static final int RESULT_CODE_CANCEL = 400;
@@ -68,6 +73,26 @@ public class SearchResultsActivity extends ActionBarActivity{
             @Override
             public void onClick(View v){
                 SearchResultsActivity.this.newSearch();
+            }
+        });
+
+        gvSearchResults.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                //bring to fullscreen view
+
+                Intent intent = new Intent(SearchResultsActivity.this, FullScreenSearchItemActivity.class);
+                intent.putExtra(SearchResultsActivity.REQUEST_FULLSCREEN_RESULT_ITEM_DATA, searchResults.get(position));
+                //don't need to receive data from this activity right now.
+                startActivity(intent);
+            }
+        });
+
+        gvSearchResults.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
+                //TODO show some quick info (fragment?) about this image, or let user share it to other apps
+                return true;
             }
         });
 

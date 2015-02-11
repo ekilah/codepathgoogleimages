@@ -12,7 +12,6 @@
     <string name="image_color">Image color</string>
     <string name="image_type">Image type</string>
     <string name="image_safety">Image safety</string>
-
     <string name="image_size_label_any">any</string>
     <string name="image_size_label_icon">icon</string>
     <string name="image_size_label_small">small</string>
@@ -21,7 +20,6 @@
     <string name="image_size_label_xlarge">xlarge</string>
     <string name="image_size_label_xxlarge">xxlarge</string>
     <string name="image_size_label_huge">huge</string>
-
     <string name="image_color_label_any">any</string>
     <string name="image_color_label_black">black</string>
     <string name="image_color_label_blue">blue</string>
@@ -35,16 +33,15 @@
     <string name="image_color_label_teal">teal</string>
     <string name="image_color_label_white">white</string>
     <string name="image_color_label_yellow">yellow</string>
-
     <string name="image_type_label_any">any</string>
     <string name="image_type_label_face">face</string>
     <string name="image_type_label_photo">photo</string>
     <string name="image_type_label_clipart">clipart</string>
     <string name="image_type_label_lineart">lineart</string>
-
     <string name="image_safe_label_any">any</string>
     <string name="image_safe_label_active">active</string>
     <string name="image_safe_label_moderate">moderate</string>
     <string name="image_safe_label_off">off</string>
+    <string name="title_activity_full_screen_search_item">FullScreenSearchItemActivity</string>
 
 </resources>
