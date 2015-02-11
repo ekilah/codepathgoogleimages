@@ -3,17 +3,29 @@ package com.mekilah.codepath.googleimagessearch.activities;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.ResponseHandlerInterface;
 import com.mekilah.codepath.googleimagessearch.R;
-import com.mekilah.codepath.googleimagessearch.activities.models.SearchResultItem;
+import com.mekilah.codepath.googleimagessearch.helpers.GoogleImagesAPI;
+import com.mekilah.codepath.googleimagessearch.models.SearchResultItem;
+import com.mekilah.codepath.googleimagessearch.models.SearchSettings;
 
-import java.lang.reflect.Array;
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 
@@ -33,9 +45,12 @@ public class SearchResultsActivity extends ActionBarActivity{
 
     private EditText etSearchBox;
     private GridView gvSearchResults;
+    private Button btnSearch;
 
     private ArrayList<SearchResultItem> searchResults;
     private ArrayAdapter<SearchResultItem> searchResultsAdapter;
+
+    private AsyncHttpClient asyncHttpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -46,6 +61,15 @@ public class SearchResultsActivity extends ActionBarActivity{
         gvSearchResults = (GridView) findViewById(R.id.gvResults_SearchResults);
         searchResults = new ArrayList<SearchResultItem>();
         searchResultsAdapter = new ArrayAdapter<SearchResultItem>(this, R.layout.search_result_item, this.searchResults);
+        asyncHttpClient = new AsyncHttpClient();
+
+        btnSearch = (Button) findViewById(R.id.btnSearch_SearchResults);
+        btnSearch.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                SearchResultsActivity.this.newSearch();
+            }
+        });
 
     }
 
@@ -121,9 +145,37 @@ public class SearchResultsActivity extends ActionBarActivity{
     }
 
     /**
-     * Add to adapter. Caller shoulcd clear adapter if it needs to be cleared, this appends.
+     * Add to adapter. Caller should clear adapter if it needs to be cleared, this appends.
      */
     private void getSearchResults(){
+        String query = GoogleImagesAPI.URL_BASE + GoogleImagesAPI.URL_PARAMETER_QUERY + this.etSearchBox.getText().toString() + SearchSettings.getInstance(this).getGoogleImagesAPIRequestParamsFromSavedSettings();
+        Log.i("IMAGES", "Query: " + AsyncHttpClient.getUrlWithQueryString(true,query,null));
+        asyncHttpClient.get(query, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response){
+                Log.i("IMAGES", "Query success.");
+                try{
+                    JSONObject responseDataObj = response.getJSONObject(GoogleImagesAPI.RESPONSE_DATA);
+                    JSONArray resultsArr = responseDataObj.getJSONArray(GoogleImagesAPI.RESPONSE_RESULTS);
+                    for(int i=0; i < resultsArr.length(); ++i){
+                        SearchResultItem item = SearchResultItem.fromJSON(resultsArr.getJSONObject(i));
+                        if(item != null){
+                            SearchResultsActivity.this.searchResultsAdapter.add(item);
+                        }
+                    }
 
+                    //TODO parse cursor object for scrolling
+                }catch(JSONException e){
+                    //TODO do something with this
+                    Toast.makeText(SearchResultsActivity.this, "JSON parse error.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse){
+                //TODO do something with this
+                Toast.makeText(SearchResultsActivity.this, "Network error: " + statusCode, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

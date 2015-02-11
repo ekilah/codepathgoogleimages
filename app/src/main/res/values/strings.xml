@@ -7,5 +7,44 @@
     <string name="advanced">Advanced</string>
     <string name="title_activity_advanced_settings">AdvancedSettingsActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="advanced_search_settings">Advanced Search Settings</string>
+    <string name="image_size">Image size</string>
+    <string name="image_color">Image color</string>
+    <string name="image_type">Image type</string>
+    <string name="image_safety">Image safety</string>
+
+    <string name="image_size_label_any">any</string>
+    <string name="image_size_label_icon">icon</string>
+    <string name="image_size_label_small">small</string>
+    <string name="image_size_label_medium">medium</string>
+    <string name="image_size_label_large">large</string>
+    <string name="image_size_label_xlarge">xlarge</string>
+    <string name="image_size_label_xxlarge">xxlarge</string>
+    <string name="image_size_label_huge">huge</string>
+
+    <string name="image_color_label_any">any</string>
+    <string name="image_color_label_black">black</string>
+    <string name="image_color_label_blue">blue</string>
+    <string name="image_color_label_brown">brown</string>
+    <string name="image_color_label_gray">gray</string>
+    <string name="image_color_label_green">green</string>
+    <string name="image_color_label_orange">orange</string>
+    <string name="image_color_label_pink">pink</string>
+    <string name="image_color_label_purple">purple</string>
+    <string name="image_color_label_red">red</string>
+    <string name="image_color_label_teal">teal</string>
+    <string name="image_color_label_white">white</string>
+    <string name="image_color_label_yellow">yellow</string>
+
+    <string name="image_type_label_any">any</string>
+    <string name="image_type_label_face">face</string>
+    <string name="image_type_label_photo">photo</string>
+    <string name="image_type_label_clipart">clipart</string>
+    <string name="image_type_label_lineart">lineart</string>
+
+    <string name="image_safe_label_any">any</string>
+    <string name="image_safe_label_active">active</string>
+    <string name="image_safe_label_moderate">moderate</string>
+    <string name="image_safe_label_off">off</string>
 
 </resources>
