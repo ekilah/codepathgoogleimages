@@ -2,12 +2,86 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.mekilah.codepath.googleimagessearch.activities.FullScreenSearchItemActivity">
+                tools:context="com.mekilah.codepath.googleimagessearch.activities.FullScreenSearchItemActivity"
+    >
+<TextView
+    android:id="@+id/tvFullScreenTitle"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    tools:text="Title of the image's web page can be really, really long!"
+    android:gravity="center"
+    android:textSize="18dp"
+    android:background="#b0b8b6b1"
+    android:maxLines="2"
+    android:paddingRight="5dp"
+    android:paddingLeft="5dp"
+    android:layout_alignParentTop="true"
+    android:visibility="invisible"
+    tools:visibility="visible"
+
+    />
+
+
+    <ImageView android:id="@+id/ivFullscreenImage"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:scaleType="center"
+        android:adjustViewBounds="true"
+        android:layout_alignParentTop="true"
+
+        />
 
 
     <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:id="@+id/tvFullScreenContent"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        tools:text="Content of the image can be really, really long also! But it's less important"
+        android:gravity="center"
+        android:textSize="14dp"
+        android:background="#b0b8b6b1"
+        android:maxLines="2"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:layout_alignBottom="@id/ivFullscreenImage"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/ivFullscreenImage"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp">
+
+        <TextView android:id="@+id/tvFullscreenSite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            tools:text="test1"
+            android:layout_weight="5"
+            android:gravity="left"
+            android:autoLink="web"
+
+            />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+        <TextView android:id="@+id/tvFullscreenDimensions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="test2"
+            android:layout_weight="5"
+            android:gravity="right"
+
+
+            />
+    </LinearLayout>
 
 </RelativeLayout>

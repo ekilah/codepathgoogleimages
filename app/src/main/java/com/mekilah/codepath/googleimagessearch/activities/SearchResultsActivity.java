@@ -36,9 +36,6 @@ public class SearchResultsActivity extends ActionBarActivity{
     public static final int REQUEST_CODE_ADVANCED_SETTINGS = 100;
     public static final int REQUEST_CODE_FULLSCREEN_RESULT_ITEM = 200;
 
-    //intent request extras keys
-    public static final String REQUEST_FULLSCREEN_RESULT_ITEM_DATA = "item_data";
-
     //intent result codes
     public static final int RESULT_CODE_CANCEL = 400;
     public static final int RESULT_CODE_SEARCH = 401;
@@ -82,7 +79,7 @@ public class SearchResultsActivity extends ActionBarActivity{
                 //bring to fullscreen view
 
                 Intent intent = new Intent(SearchResultsActivity.this, FullScreenSearchItemActivity.class);
-                intent.putExtra(SearchResultsActivity.REQUEST_FULLSCREEN_RESULT_ITEM_DATA, searchResults.get(position));
+                intent.putExtra(FullScreenSearchItemActivity.REQUEST_FULLSCREEN_RESULT_ITEM_DATA, searchResults.get(position));
                 //don't need to receive data from this activity right now.
                 startActivity(intent);
             }
