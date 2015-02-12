@@ -4,34 +4,39 @@
                 android:layout_height="match_parent"
                 tools:context="com.mekilah.codepath.googleimagessearch.activities.FullScreenSearchItemActivity"
     >
-<TextView
-    android:id="@+id/tvFullScreenTitle"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    tools:text="Title of the image's web page can be really, really long!"
-    android:gravity="center"
-    android:textSize="18dp"
-    android:background="#b0b8b6b1"
-    android:maxLines="2"
-    android:paddingRight="5dp"
-    android:paddingLeft="5dp"
-    android:layout_alignParentTop="true"
-    android:visibility="invisible"
-    tools:visibility="visible"
-
-    />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rlFullScreenImageArea"
+        android:layout_above="@+id/llFullScreenDetailsBar"
+        >
 
 
     <ImageView android:id="@+id/ivFullscreenImage"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:scaleType="center"
+        android:layout_height="fill_parent"
+        android:scaleType="centerInside"
         android:adjustViewBounds="true"
         android:layout_alignParentTop="true"
 
         />
 
+        <TextView
+            android:id="@+id/tvFullScreenTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            tools:text="Title of the image's web page can be really, really long!"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:background="#b0b8b6b1"
+            android:maxLines="2"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:layout_alignParentTop="true"
+            android:visibility="invisible"
+            tools:visibility="visible"
 
+            />
     <TextView
         android:id="@+id/tvFullScreenContent"
         android:layout_width="match_parent"
@@ -48,21 +53,23 @@
         tools:visibility="visible"
         />
 
-    <LinearLayout
+</RelativeLayout>
+    <LinearLayout android:id="@+id/llFullScreenDetailsBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@id/ivFullscreenImage"
+        android:layout_above="@+id/llFullScreenBottomButtonsBar"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        >
 
         <TextView android:id="@+id/tvFullscreenSite"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            tools:text="test1"
+            tools:text="Site: awesomeimages.com/images/"
             android:layout_weight="5"
             android:gravity="left"
             android:autoLink="web"
@@ -76,12 +83,53 @@
         <TextView android:id="@+id/tvFullscreenDimensions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="test2"
+            tools:text="Dimensions: 1024 x 768"
             android:layout_weight="5"
             android:gravity="right"
 
 
             />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/llFullScreenBottomButtonsBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingTop="10dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
+
+        >
+        <Button android:id="@+id/btnFullScreenVisitSourcePage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_fancy_button_blue"
+            android:text="Open in browser"
+            android:layout_marginLeft="20dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="5"
+
+            />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <Button android:id="@+id/btnFullscreenOpenInOtherApp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_fancy_button_green"
+            android:text="Open in app..."
+            android:layout_marginRight="20dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_weight="5"
+
+            />
+
     </LinearLayout>
 
 </RelativeLayout>

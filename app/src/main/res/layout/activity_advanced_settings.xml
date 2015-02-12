@@ -27,9 +27,52 @@
         android:orientation="vertical"
         >
 
-
-
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llSettingsItems"
+        android:orientation="vertical"
+        android:id="@+id/llSettingsItemsBottom"
+        >
+
+
+        </LinearLayout>
+
+    <LinearLayout android:id="@+id/llSettingsButtons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/llSettingsItemsBottom"
+        android:paddingTop="20dp"
+        >
+
+
+        <Button android:id="@+id/btnSettingsCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_fancy_button_gray"
+                android:text="@string/cancel"
+                android:layout_weight="5"
+            />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            />
+
+        <Button android:id="@+id/btnSettingsSave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_fancy_button_green"
+                android:text="@string/save"
+                android:layout_weight="5"
+            />
+
+        </LinearLayout>
 
 
 </RelativeLayout>

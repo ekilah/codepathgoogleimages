@@ -55,6 +55,7 @@ public class GoogleImagesAPI{
     public static String RESPONSE_DATA = "responseData";
     public static String RESPONSE_CURSOR = "cursor";
     public static String RESPONSE_RESULTS = "results";
+    public static String RESPONSE_DETAILS = "responseDetails";
 
     public static String RESPONSE_RESULT_WIDTH = "width";
     public static String RESPONSE_RESULT_HEIGHT = "height";

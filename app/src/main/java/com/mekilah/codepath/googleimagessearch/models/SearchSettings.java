@@ -19,6 +19,7 @@ public class SearchSettings {
     public static final String KEY_COLOR = "image_color";
     public static final String KEY_TYPE = "image_type";
     public static final String KEY_SAFE = "image_safety";
+    public static final String KEY_SITE = "image_site";
 
     /*
     "image_size" => { [ SettingsDetails("sm" , R.string.small_string_resource) ] }
@@ -92,6 +93,11 @@ public class SearchSettings {
         imageSafeties.add(new ImageSafeSettingDetails(GoogleImagesAPI.SAFE_OFF, R.string.image_safe_label_off));
         this.options.put(SearchSettings.KEY_SAFE, imageSafeties);
         this.choices.put(SearchSettings.KEY_SAFE, imageSafeties.get(0));
+
+        List<SettingDetails> imageSites = new ArrayList<>(1);
+        imageSites.add(new ImageSiteSettingDetails("", R.string.any));
+        this.options.put(KEY_SITE, imageSites);
+        this.choices.put(KEY_SITE, imageSites.get(0));
     }
 
     public boolean isValidOptionKey(String key){
@@ -113,6 +119,7 @@ public class SearchSettings {
         return -1;
     }
 
+    /*
     public SettingDetails getSettingDetailsIfValidLocalizedResourceForOption(String key, String localizedResource){
         if(!isValidOptionKey(key)){
             return null;
@@ -126,12 +133,21 @@ public class SearchSettings {
         }
         return sd;
     }
-
+    */
     public SettingDetails getSettingDetailsIfValidApiParamValueForOption(String key, String apiParamValue){
         if(!isValidOptionKey(key)){
             return null;
         }
         SettingDetails sd = null;
+
+        //hack for settings with edit texts instead of spinners
+        //they'll have only one value in the list of options, we just set a copy's string to what we searched for
+        if(key == KEY_SITE){
+            sd = new SettingDetails(options.get(key).get(0));
+            sd.apiParamValue = apiParamValue;
+            return sd;
+        }
+
         for(SettingDetails setting : options.get(key)){
             if(setting.hasApiParamValue(apiParamValue)){
                 sd = setting;
@@ -141,6 +157,7 @@ public class SearchSettings {
         return sd;
     }
 
+    /*
     public boolean setChoiceFromLocalizedResourceString(String key, String localizedResource){
         SettingDetails sd = getSettingDetailsIfValidLocalizedResourceForOption(key, localizedResource);
 
@@ -150,7 +167,7 @@ public class SearchSettings {
 
         choices.put(key, sd);
         return true;
-    }
+    }*/
 
     public boolean setChoiceFromApiParamValue(String key, String apiParamValue){
         SettingDetails sd = getSettingDetailsIfValidApiParamValueForOption(key, apiParamValue);
@@ -203,6 +220,13 @@ public class SearchSettings {
 
         }
 
+        public SettingDetails(SettingDetails other){
+            apiParamValue = other.apiParamValue;
+            apiParam = other.apiParam;
+            resourceID = other.resourceID;
+            localizedResource = other.localizedResource;
+        }
+
         public boolean hasApiParamValue(String param){
             return this.apiParamValue.equals(param);
         }
@@ -244,6 +268,13 @@ public class SearchSettings {
         }
     }
 
+    public static class ImageSiteSettingDetails extends SettingDetails{
+        public ImageSiteSettingDetails(String apv, int rid){
+            super(apv, rid);
+            this.apiParam = GoogleImagesAPI.URL_PARAMETER_SITESEARCH;
+        }
+    }
+
     public String getGoogleImagesAPIRequestParamsFromSavedSettings(){
         StringBuilder stringBuilder = new StringBuilder();
         for(String key: this.choices.keySet()){
@@ -251,6 +282,10 @@ public class SearchSettings {
             stringBuilder.append(details.apiParam + details.apiParamValue);
         }
         return stringBuilder.toString();
+    }
+
+    public void saveSiteSetting(String site){
+        this.choices.get(KEY_SITE).apiParamValue = site;
     }
 
 }

@@ -12,6 +12,7 @@
     <string name="image_color">Image color</string>
     <string name="image_type">Image type</string>
     <string name="image_safety">Image safety</string>
+    <string name="image_site">Site filter</string>
     <string name="image_size_label_any">any</string>
     <string name="image_size_label_icon">icon</string>
     <string name="image_size_label_small">small</string>
@@ -43,5 +44,14 @@
     <string name="image_safe_label_moderate">moderate</string>
     <string name="image_safe_label_off">off</string>
     <string name="title_activity_full_screen_search_item">FullScreenSearchItemActivity</string>
+    <string name="search">Search</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="any">any</string>
+    <string name="no_internet">No internet connection!</string>
+    <string name="api_limit_reached">Google API results limit reached.</string>
+    <string name="json_parse_error">JSON parse error.</string>
+    <string name="error_colon">"Error: "</string>
+    <string name="network_error_colon">"Network error: "</string>
 
 </resources>

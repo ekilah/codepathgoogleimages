@@ -1,6 +1,9 @@
 package com.mekilah.codepath.googleimagessearch.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +21,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.ResponseHandlerInterface;
 import com.mekilah.codepath.googleimagessearch.R;
+import com.mekilah.codepath.googleimagessearch.adapters.SearchResultItemGridAdapter;
+import com.mekilah.codepath.googleimagessearch.helpers.EndlessScrollListener;
 import com.mekilah.codepath.googleimagessearch.helpers.GoogleImagesAPI;
 import com.mekilah.codepath.googleimagessearch.models.SearchResultItem;
 import com.mekilah.codepath.googleimagessearch.models.SearchSettings;
@@ -50,7 +55,7 @@ public class SearchResultsActivity extends ActionBarActivity{
     private Button btnSearch;
 
     private ArrayList<SearchResultItem> searchResults;
-    private ArrayAdapter<SearchResultItem> searchResultsAdapter;
+    private SearchResultItemGridAdapter searchResultsAdapter;
 
     private AsyncHttpClient asyncHttpClient;
 
@@ -62,7 +67,9 @@ public class SearchResultsActivity extends ActionBarActivity{
         etSearchBox = (EditText) findViewById(R.id.etSearchBox_SearchResults);
         gvSearchResults = (GridView) findViewById(R.id.gvResults_SearchResults);
         searchResults = new ArrayList<SearchResultItem>();
-        searchResultsAdapter = new ArrayAdapter<SearchResultItem>(this, R.layout.search_result_item, this.searchResults);
+        searchResultsAdapter = new SearchResultItemGridAdapter(this, this.searchResults);
+        gvSearchResults.setAdapter(searchResultsAdapter);
+
         asyncHttpClient = new AsyncHttpClient();
 
         btnSearch = (Button) findViewById(R.id.btnSearch_SearchResults);
@@ -93,6 +100,13 @@ public class SearchResultsActivity extends ActionBarActivity{
             }
         });
 
+        gvSearchResults.setOnScrollListener(new EndlessScrollListener(){
+            @Override
+            public void onLoadMore(int page, int totalItemsCount){
+                getSearchResults(totalItemsCount);
+            }
+        });
+
     }
 
 
@@ -111,8 +125,6 @@ public class SearchResultsActivity extends ActionBarActivity{
         int id = item.getItemId();
 
         switch(id){
-            case R.id.action_settings:
-                return true;
             case R.id.miAdvancedSearchSettings_SearchResultsMenu:
                 this.onAdvancedMenuButtonPresesed(item);
                 return true;
@@ -163,21 +175,34 @@ public class SearchResultsActivity extends ActionBarActivity{
      */
     private void newSearch(){
         searchResultsAdapter.clear();
-        this.getSearchResults();
+        this.getSearchResults(0);
     }
 
     /**
      * Add to adapter. Caller should clear adapter if it needs to be cleared, this appends.
      */
-    private void getSearchResults(){
-        String query = GoogleImagesAPI.URL_BASE + GoogleImagesAPI.URL_PARAMETER_QUERY + this.etSearchBox.getText().toString() + SearchSettings.getInstance(this).getGoogleImagesAPIRequestParamsFromSavedSettings();
+    private void getSearchResults(final int paginationIndex){
+
+        if(isNetworkAvailable() == false){
+            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+            return;
+        }
+        String query = GoogleImagesAPI.URL_BASE + GoogleImagesAPI.URL_PARAMETER_QUERY + this.etSearchBox.getText().toString() + GoogleImagesAPI.URL_PARAMETER_START + paginationIndex +  SearchSettings.getInstance(this).getGoogleImagesAPIRequestParamsFromSavedSettings();
         Log.i("IMAGES", "Query: " + AsyncHttpClient.getUrlWithQueryString(true,query,null));
         asyncHttpClient.get(query, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
-                Log.i("IMAGES", "Query success.");
+                Log.i("IMAGES", "Query success. Code: " + statusCode);
                 try{
-                    JSONObject responseDataObj = response.getJSONObject(GoogleImagesAPI.RESPONSE_DATA);
+                    JSONObject responseDataObj = response.optJSONObject(GoogleImagesAPI.RESPONSE_DATA);
+                    if(responseDataObj == null){
+                        String details = response.getString(GoogleImagesAPI.RESPONSE_DETAILS);
+                        if(paginationIndex == 64){
+                            details = getString(R.string.api_limit_reached);
+                        }
+                        Toast.makeText(SearchResultsActivity.this, getString(R.string.error_colon) + details, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     JSONArray resultsArr = responseDataObj.getJSONArray(GoogleImagesAPI.RESPONSE_RESULTS);
                     for(int i=0; i < resultsArr.length(); ++i){
                         SearchResultItem item = SearchResultItem.fromJSON(resultsArr.getJSONObject(i));
@@ -186,18 +211,21 @@ public class SearchResultsActivity extends ActionBarActivity{
                         }
                     }
 
-                    //TODO parse cursor object for scrolling
                 }catch(JSONException e){
-                    //TODO do something with this
-                    Toast.makeText(SearchResultsActivity.this, "JSON parse error.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchResultsActivity.this, getString(R.string.json_parse_error), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse){
-                //TODO do something with this
-                Toast.makeText(SearchResultsActivity.this, "Network error: " + statusCode, Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchResultsActivity.this, getString(R.string.network_error_colon) + statusCode, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 }

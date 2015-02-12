@@ -46,10 +46,10 @@ public class FullScreenSearchItemActivity extends ActionBarActivity{
 
         //populate view with search item
         tvTitle.setText(Html.fromHtml(searchResultItem.title));
-        Picasso.with(this).load(searchResultItem.url).resize(searchResultItem.width, searchResultItem.height).centerInside().placeholder(R.drawable.ic_launcher).into(ivImage);
+        Picasso.with(this).load(searchResultItem.url).resize(searchResultItem.width, searchResultItem.height).placeholder(R.drawable.ic_launcher).into(ivImage);
         tvContent.setText(Html.fromHtml(searchResultItem.content));
-        tvSite.setText(Html.fromHtml("Site: " + searchResultItem.url));
-        tvDimensions.setText(searchResultItem.width + " x " + searchResultItem.height);
+        tvSite.setText(Html.fromHtml("Source site: " + searchResultItem.visibleUrl));
+        tvDimensions.setText("Dimensions: \n" + searchResultItem.width + " x " + searchResultItem.height);
 
         //image tap to turn on/off title & content views
         ivImage.setOnClickListener(new View.OnClickListener(){
@@ -81,6 +81,12 @@ public class FullScreenSearchItemActivity extends ActionBarActivity{
 
         //noinspection SimplifiableIfStatement
         if(id == R.id.action_settings){
+            return true;
+        }
+
+        //action bar back button
+        if(id == android.R.id.home){
+            finish();
             return true;
         }
 
