@@ -40,4 +40,4 @@ enjoy these demos of the latest features (made with [LICEcap](http://www.cockos.
 
 Master:
 
-![Demo GIF](https://github.com/ekilah/codepathinstagram/blob/master/demo.gif)
+![Demo GIF](https://github.com/ekilah/codepathgoogleimages/blob/master/demo.gif)
