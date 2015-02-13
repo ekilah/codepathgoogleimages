@@ -4,22 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.Toast;
 
+import com.etsy.android.grid.StaggeredGridView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.ResponseHandlerInterface;
 import com.mekilah.codepath.googleimagessearch.R;
 import com.mekilah.codepath.googleimagessearch.adapters.SearchResultItemGridAdapter;
 import com.mekilah.codepath.googleimagessearch.helpers.EndlessScrollListener;
@@ -39,20 +37,16 @@ public class SearchResultsActivity extends ActionBarActivity{
 
     //intent request codes
     public static final int REQUEST_CODE_ADVANCED_SETTINGS = 100;
-    public static final int REQUEST_CODE_FULLSCREEN_RESULT_ITEM = 200;
 
     //intent result codes
     public static final int RESULT_CODE_CANCEL = 400;
     public static final int RESULT_CODE_SEARCH = 401;
     public static final int RESULT_CODE_DONE = 402;
 
-
-    //intent request data keys
-    public static final String REQUEST_DATA_SEARCH_STRING = "searchString";
-
-    private EditText etSearchBox;
-    private GridView gvSearchResults;
-    private Button btnSearch;
+    private StaggeredGridView gvSearchResults;
+    private SearchView searchView;
+    private String lastQueryString;
+    private String currentSearchText;
 
     private ArrayList<SearchResultItem> searchResults;
     private SearchResultItemGridAdapter searchResultsAdapter;
@@ -64,21 +58,16 @@ public class SearchResultsActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-        etSearchBox = (EditText) findViewById(R.id.etSearchBox_SearchResults);
-        gvSearchResults = (GridView) findViewById(R.id.gvResults_SearchResults);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.google_image_search));
+        setSupportActionBar(toolbar);
+
+        gvSearchResults = (StaggeredGridView) findViewById(R.id.gvResults_SearchResults);
         searchResults = new ArrayList<SearchResultItem>();
         searchResultsAdapter = new SearchResultItemGridAdapter(this, this.searchResults);
         gvSearchResults.setAdapter(searchResultsAdapter);
 
         asyncHttpClient = new AsyncHttpClient();
-
-        btnSearch = (Button) findViewById(R.id.btnSearch_SearchResults);
-        btnSearch.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                SearchResultsActivity.this.newSearch();
-            }
-        });
 
         gvSearchResults.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
@@ -86,17 +75,10 @@ public class SearchResultsActivity extends ActionBarActivity{
                 //bring to fullscreen view
 
                 Intent intent = new Intent(SearchResultsActivity.this, FullScreenSearchItemActivity.class);
-                intent.putExtra(FullScreenSearchItemActivity.REQUEST_FULLSCREEN_RESULT_ITEM_DATA, searchResults.get(position));
+                intent.putExtra(FullScreenSearchItemActivity.REQUEST_FULLSCREEN_RESULT_ITEM_LIST, searchResults);
+                intent.putExtra(FullScreenSearchItemActivity.REQUEST_FULLSCREEN_RESULT_ITEM_POSITION, position);
                 //don't need to receive data from this activity right now.
                 startActivity(intent);
-            }
-        });
-
-        gvSearchResults.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
-                //TODO show some quick info (fragment?) about this image, or let user share it to other apps
-                return true;
             }
         });
 
@@ -114,6 +96,24 @@ public class SearchResultsActivity extends ActionBarActivity{
     public boolean onCreateOptionsMenu(Menu menu){
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search_results, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String s){
+                newSearch(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s){
+                currentSearchText = s;
+                return false;
+            }
+        });
+
+
         return true;
     }
 
@@ -135,7 +135,6 @@ public class SearchResultsActivity extends ActionBarActivity{
 
     private void onAdvancedMenuButtonPresesed(MenuItem menuItem){
         Intent intent = new Intent(this, AdvancedSettingsActivity.class);
-        intent.putExtra(REQUEST_DATA_SEARCH_STRING, this.etSearchBox.getText().toString());
         startActivityForResult(intent, REQUEST_CODE_ADVANCED_SETTINGS);
     }
 
@@ -166,15 +165,19 @@ public class SearchResultsActivity extends ActionBarActivity{
         }
 
         if(executeSearch){
-            this.newSearch();
+            this.newSearch(currentSearchText);
         }
     }
 
     /**
      * Clear adapter and call for more search results.
      */
-    private void newSearch(){
+    private void newSearch(String searchQuery){
+        if(searchQuery == null){
+            return;
+        }
         searchResultsAdapter.clear();
+        this.lastQueryString = searchQuery;
         this.getSearchResults(0);
     }
 
@@ -187,12 +190,12 @@ public class SearchResultsActivity extends ActionBarActivity{
             Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             return;
         }
-        String query = GoogleImagesAPI.URL_BASE + GoogleImagesAPI.URL_PARAMETER_QUERY + this.etSearchBox.getText().toString() + GoogleImagesAPI.URL_PARAMETER_START + paginationIndex +  SearchSettings.getInstance(this).getGoogleImagesAPIRequestParamsFromSavedSettings();
-        Log.i("IMAGES", "Query: " + AsyncHttpClient.getUrlWithQueryString(true,query,null));
+        String query = GoogleImagesAPI.URL_BASE + GoogleImagesAPI.URL_PARAMETER_QUERY + this.lastQueryString + GoogleImagesAPI.URL_PARAMETER_START + paginationIndex +  SearchSettings.getInstance(this).getGoogleImagesAPIRequestParamsFromSavedSettings();
+        //Log.i("IMAGES", "Query: " + AsyncHttpClient.getUrlWithQueryString(true,query,null));
         asyncHttpClient.get(query, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
-                Log.i("IMAGES", "Query success. Code: " + statusCode);
+                //Log.i("IMAGES", "Query success. Code: " + statusCode);
                 try{
                     JSONObject responseDataObj = response.optJSONObject(GoogleImagesAPI.RESPONSE_DATA);
                     if(responseDataObj == null){

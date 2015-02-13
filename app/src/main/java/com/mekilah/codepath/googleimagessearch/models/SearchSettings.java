@@ -43,8 +43,8 @@ public class SearchSettings {
 
     private SearchSettings(Context context){
         this.context = context;
-        this.options = new Hashtable<>(4);
-        this.choices = new HashMap<>(4);
+        this.options = new Hashtable<>(5);
+        this.choices = new HashMap<>(5);
     }
 
     private void init(){

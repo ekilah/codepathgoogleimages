@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignBottom="@+id/etSettingChoice"
         android:layout_marginRight="30dp"
         android:layout_marginLeft="10dp"
+        android:layout_gravity="bottom"
         tools:text="@string/image_size"
         android:id="@+id/tvSettingName2"
         android:textStyle="bold"
         android:textSize="20sp"
-
+        android:layout_weight="3"
         />
 
     <EditText
         android:id="@+id/etSettingChoice"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/tvSettingName2"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"
         android:hint="@string/any"
-
+        android:layout_weight="7"
         />
 
-</RelativeLayout>
+</LinearLayout>

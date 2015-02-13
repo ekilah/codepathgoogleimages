@@ -33,7 +33,7 @@ public class SearchResultItemGridAdapter extends ArrayAdapter<SearchResultItem>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         SearchResultItemGridViewHolder viewHolder;
-        Log.i("IMAGES", "getView called in grid adapter for position " + position);
+        //Log.i("IMAGES", "getView called in grid adapter for position " + position);
         if(convertView == null || convertView.getTag() == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.search_result_item, parent, false);
             viewHolder = new SearchResultItemGridViewHolder();
@@ -44,7 +44,7 @@ public class SearchResultItemGridAdapter extends ArrayAdapter<SearchResultItem>{
             viewHolder = (SearchResultItemGridViewHolder) convertView.getTag();
         }
 
-        Picasso.with(getContext()).load(getItem(position).tbUrl).resize(getItem(position).tbWidth, getItem(position).tbHeight).centerInside().placeholder(R.drawable.ic_launcher).into(viewHolder.ivResultItem);
+        Picasso.with(getContext()).load(getItem(position).tbUrl).resize(getItem(position).tbWidth, getItem(position).tbHeight).centerInside().placeholder(R.drawable.loading).into(viewHolder.ivResultItem);
 
         viewHolder.tvResultTitle.setText(Html.fromHtml(getItem(position).title));
         convertView.setTag(viewHolder);

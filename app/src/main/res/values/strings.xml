@@ -7,7 +7,7 @@
     <string name="advanced">Advanced</string>
     <string name="title_activity_advanced_settings">AdvancedSettingsActivity</string>
     <string name="hello_world">Hello world!</string>
-    <string name="advanced_search_settings">Advanced Search Settings</string>
+    <string name="search_settings">Search Settings</string>
     <string name="image_size">Image size</string>
     <string name="image_color">Image color</string>
     <string name="image_type">Image type</string>
@@ -46,12 +46,18 @@
     <string name="title_activity_full_screen_search_item">FullScreenSearchItemActivity</string>
     <string name="search">Search</string>
     <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
     <string name="any">any</string>
     <string name="no_internet">No internet connection!</string>
     <string name="api_limit_reached">Google API results limit reached.</string>
     <string name="json_parse_error">JSON parse error.</string>
     <string name="error_colon">"Error: "</string>
     <string name="network_error_colon">"Network error: "</string>
+    <string name="share_ellipsis">Share...</string>
+    <string name="open_image_url">Go to URL</string>
+    <string name="google_image_search">Google Image Search</string>
+    <string name="dimensions_colon">Dimensions: \n</string>
+    <string name="source_page_at">"Source page at: "</string>
+    <string name="open_url_with">Open URL with...</string>
+    <string name="open_image_with">Open image with...</string>
 
 </resources>

@@ -3,48 +3,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context=".activites.SearchResultsActivity">
-    <RelativeLayout
-        android:id="@+id/rlTopBar_SearchResults"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
 
-        >
-
-        <EditText
-            android:id="@+id/etSearchBox_SearchResults"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/searchbarhint"
-            android:layout_toLeftOf="@+id/btnSearch_SearchResults"
-            android:layout_alignTop="@id/btnSearch_SearchResults"
-            android:layout_alignBottom="@id/btnSearch_SearchResults"
-            android:layout_alignParentLeft="true"
-            />
-        <Button
-            android:id="@+id/btnSearch_SearchResults"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_fancy_button_blue"
-            android:layout_alignParentRight="true"
-            android:text="@string/search"
-            />
-
-        </RelativeLayout>
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary">
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/rlResultsArea_SearchResults"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/rlTopBar_SearchResults"
+        android:layout_below="@+id/toolbar"
         >
 
-        <GridView
+       <!-- <GridView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:numColumns="2"
             android:id="@+id/gvResults_SearchResults"
+            android:stretchMode="columnWidth"
 
-            ></GridView>
+            ></GridView>-->
+
+        <com.etsy.android.grid.StaggeredGridView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/gvResults_SearchResults"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:column_count="2" />
 
         </RelativeLayout>
 
